@@ -128,6 +128,18 @@ public class Operations {
 	}
 
 	
+	public static double[] normalize(double[] vector) {
+		double max = getMax(vector);
+		
+		int intervs = vector.length;
+		for (int i = 0; i < intervs; i++) {
+			vector[i] = vector[i] / (double) max;
+			
+		}
+
+		return vector;
+
+	}
 	public static double[] [] permuteColumns(double[][] matrix, int i,int j) {
 		
 		

@@ -20,6 +20,7 @@ public class HabitatComparisonAllEuropeanSeas {
 		int bins = 200;
 		
 		boolean doPermutations = false;
+		boolean doStandardize = true;
 		
 		String nonNullexceptions[] = { "Sea_Ice_Concentration" };
 		double HRSMatrix[][] = new double[habitats.length][habitats.length];
@@ -88,10 +89,11 @@ public class HabitatComparisonAllEuropeanSeas {
 		
 		System.out.println("############################DONE############################");
 		
-		HRSMatrix = new Operations().standardize(HRSMatrix);
-		//HRSMatrix = Operations.symmetrizeByMean(HRSMatrix);
-		HRSMatrix = Operations.symmetrizeByMax(HRSMatrix);
-		
+		if (doStandardize) {
+			HRSMatrix = new Operations().standardize(HRSMatrix);
+			//HRSMatrix = Operations.symmetrizeByMean(HRSMatrix);
+			HRSMatrix = Operations.symmetrizeByMax(HRSMatrix);
+		}
 		StringBuffer sb = new StringBuffer();
 		String header = ","+Arrays.toString(habitats).replace("[", "").replace("]", "");
 		sb.append(header+"\n");
@@ -106,9 +108,7 @@ public class HabitatComparisonAllEuropeanSeas {
 			}
 		}
 		
-		
-		
-		String outFile = basePath+"\\"+"HRSComparisonMatrix"+"_Perm_"+doPermutations+".csv";
+		String outFile = basePath+"\\"+"HRSComparisonMatrix"+"_Perm_"+doPermutations+"_Standardized_"+doStandardize+".csv";
 		File outFileF = new File(outFile);
 		FileWriter fw = new FileWriter(outFileF);
 		fw.write(sb.toString());

@@ -14,6 +14,8 @@ public class HabitatRepresentativenessScore {
 	public double[] HRS_VECTOR = null;
 	public double HRS = 0d;
 	public int maxNofBins = 100;
+	public double[][] pcaComponents;
+	public PrincipalComponentAnalysis pca;
 	
 	public boolean goodfit = false;
 	
@@ -71,10 +73,12 @@ public class HabitatRepresentativenessScore {
 		double[][] rightAreaPoints = operations.standardize(secondHabitat);
 		System.out.println("CALCULATING PCA");
 		//calculate PCA
-		PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis();
+		pca = new PrincipalComponentAnalysis();
 		pca.calcPCA(rightAreaPoints);
 		// get the pca components for all the vector
-		double[][] pcaComponents = pca.getComponentsMatrix(rightAreaPoints);
+		pcaComponents = pca.getComponentsMatrix(rightAreaPoints);
+		
+		
 		System.out.println("EXTRACTED "+pcaComponents[0].length+" COMPONENTS");
 		System.out.println("CALCULATING HISTOGRAMS");
 		// calculate the frequency distributions for all the pca: each row will be a frequency distribution for a pca component associated to uniform divisions of the range
