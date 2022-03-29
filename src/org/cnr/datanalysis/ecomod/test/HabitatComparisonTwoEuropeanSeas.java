@@ -31,14 +31,14 @@ public class HabitatComparisonTwoEuropeanSeas {
 			String habitat1Path = basePath + "\\" + habitat1 + "\\" + year;
 			int hj = 0;
 			for (String habitat2 : habitats) {
-				
+				/*
 				if (habitat1.equals(habitat2)) {
 					HRSMatrix[hi][hj] = 1;
 					hrsvectors.add(new double[0]);
 					hj++;
 					continue;
 				}
-				
+				*/
 				String habitat2Path = basePath + "\\" + habitat2 + "\\" + year;
 
 				File habitat1f = new File(habitat1Path);
@@ -90,8 +90,28 @@ public class HabitatComparisonTwoEuropeanSeas {
 				}
 				
 				
+				double covariance [][] = new double[fmatrix1[0].length][fmatrix1[0].length];
+				double[][] fmatrix1T = Operations.traspose(fmatrix1);
+				double[][] fmatrix2T = Operations.traspose(fmatrix2);
 				
+				for (int f1=0;f1<fmatrix1[0].length;f1++) {
+					double [] v1 = fmatrix1T[f1];
+					
+					for (int f2=0;f2<fmatrix1[0].length;f2++) {
+						
+						double [] v2= fmatrix2T[f2];
+						if (f1==f2) {
+							double c = Operations.covariance(v1, v2);
+							covariance[f1][f2] = c;
+						}
+					}
+					
+				}
 				
+				System.out.println("COVARIANCE\n");
+				for (int ff=0;ff<covariance.length;ff++) {
+					System.out.println(Arrays.toString(covariance[ff]));
+				}
 				HRSMatrix[hi][hj] = meanHRS;
 				hj++;
 			}
@@ -145,6 +165,9 @@ public class HabitatComparisonTwoEuropeanSeas {
 		fw.write(sb2.toString());
 		fw.close();
 	}
+	
+	
+	
 
 	public static String[] cleanupStrings(String[] ss) {
 		int i = 0;

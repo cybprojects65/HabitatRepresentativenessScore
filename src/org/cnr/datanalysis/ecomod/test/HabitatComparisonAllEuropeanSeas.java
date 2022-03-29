@@ -91,8 +91,8 @@ public class HabitatComparisonAllEuropeanSeas {
 		
 		if (doStandardize) {
 			HRSMatrix = new Operations().standardize(HRSMatrix);
-			//HRSMatrix = Operations.symmetrizeByMean(HRSMatrix);
-			HRSMatrix = Operations.symmetrizeByMax(HRSMatrix);
+			HRSMatrix = Operations.symmetrizeByMean(HRSMatrix);
+			//HRSMatrix = Operations.symmetrizeByMax(HRSMatrix);
 		}
 		StringBuffer sb = new StringBuffer();
 		String header = ","+Arrays.toString(habitats).replace("[", "").replace("]", "");

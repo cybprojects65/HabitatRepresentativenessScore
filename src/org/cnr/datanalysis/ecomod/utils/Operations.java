@@ -127,6 +127,18 @@ public class Operations {
 
 	}
 
+	public static double covariance(double[] x, double[] y) {
+        double c = 0;
+        double meanX = Operations.mean(x);
+        double meanY = Operations.mean(y);
+        int xl = Math.min(x.length, y.length);
+        
+        for (int t = 0; t < xl; t++) {
+            c += (x[t] - meanX) * (y[t] - meanY);
+        }
+        return c / (double) (x.length - 1); // -1 for sample covariance
+    }
+	
 	
 	public static double[] normalize(double[] vector) {
 		double max = getMax(vector);
