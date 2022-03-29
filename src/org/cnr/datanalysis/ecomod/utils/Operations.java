@@ -2,6 +2,7 @@ package org.cnr.datanalysis.ecomod.utils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -127,6 +128,26 @@ public class Operations {
 	}
 
 	
+	public static double[] [] permuteColumns(double[][] matrix, int i,int j) {
+		
+		
+		
+		double [][] permMatrix = new double[matrix.length][matrix[0].length];
+		for (int id = 0; id < permMatrix.length; id++)
+		     permMatrix[id] = Arrays.copyOf(matrix[id], matrix[id].length);
+		
+		for (int k=0;k<matrix.length;k++) {
+			permMatrix [k] [i]= matrix[k][j];
+		}
+		
+		for (int k=0;k<matrix.length;k++) {
+			permMatrix [k] [j]= matrix[k][i];
+		}
+		
+		return permMatrix;
+
+	}
+	
 	public static double[][] normalizeMatrix(double[][] mat) {
 		int rows = mat.length;
 		int cols = mat[0].length;
@@ -168,8 +189,8 @@ public class Operations {
 	}
 
 	// finds the best subdivision for a sequence of numbers
-	public static double[] uniformDivide(double max, double min, double[] points) {
-		int maxintervals = 10;
+	public static double[] uniformDivide(double max, double min, double[] points, int maxNofBins) {
+		int maxintervals = maxNofBins;
 		int n = maxintervals;
 
 		boolean subdivisionOK = false;
@@ -296,6 +317,40 @@ public class Operations {
 		return matrix;
 	}
 
+	public static double[][] symmetrizeByMean(double[][] matrix) {
+		double [][] newMatrix = new double[matrix.length][matrix[0].length];
+		
+		for (int i=0;i<newMatrix.length;i++) {
+		
+			for (int j=0;j<newMatrix[0].length;j++) {
+				
+				newMatrix [i][j]= (matrix[i][j]+matrix[j][i])/2;
+			
+			}
+			
+		}
+		
+		return newMatrix;
+		
+	}
+	
+	public static double[][] symmetrizeByMax(double[][] matrix) {
+		double [][] newMatrix = new double[matrix.length][matrix[0].length];
+		
+		for (int i=0;i<newMatrix.length;i++) {
+		
+			for (int j=0;j<newMatrix[0].length;j++) {
+				
+				newMatrix [i][j]= Math.max(matrix[i][j],matrix[j][i]);
+			
+			}
+			
+		}
+		
+		return newMatrix;
+		
+	}
+	
 	public static double variance (double[] data) {
 		
 		double mean = 0.0;
@@ -411,7 +466,7 @@ public class Operations {
 		double min = getMin(points);
 		System.out.println("<" + min + "," + max + ">");
 
-		double[] interval = uniformDivide(max, min, points);
+		double[] interval = uniformDivide(max, min, points,10);
 
 		double[] frequencies = calcFrequencies(interval, points);
 		for (int i = 0; i < interval.length; i++) {

@@ -13,6 +13,22 @@ public class HabitatRepresentativenessScore {
 
 	public double[] HRS_VECTOR = null;
 	public double HRS = 0d;
+	public int maxNofBins = 100;
+	
+	public boolean goodfit = false;
+	
+	public boolean isGoodfit() {
+		return goodfit;
+	}
+
+	public HabitatRepresentativenessScore(int numberOfComparisonBins) {
+		this.maxNofBins = numberOfComparisonBins;
+	}
+
+	public HabitatRepresentativenessScore() {
+		this.maxNofBins = 10;
+	}
+	
 	List<double[]> frequencyDistrib;
 	List<double[]> intervals; // uniform subdivision of the numeric ranges
 	
@@ -77,7 +93,7 @@ public class HabitatRepresentativenessScore {
 		//calculate absolute differences and sum -> obtain a hrs for each PCA component = for each feature
 		HRS_VECTOR = new double[components];
 		double[][] habitatPcaPointsMatrix = Operations.traspose(leftAreaComponents);
-		
+		int ncomparisons = 0;
 		for (int i = 0; i < components; i++) {
 			double[] habitatPcaPoints = habitatPcaPointsMatrix[i];
 			// calculate frequency distributions respect to previous intervals
@@ -89,6 +105,7 @@ public class HabitatRepresentativenessScore {
 			System.out.println("\tHISTO 1 "+Arrays.toString(frequenciesI));
 			System.out.println("\tHISTO 2 "+Arrays.toString(habitatPcafrequencies));
 			double[] absdifference = Operations.vectorialAbsoluteDifference(habitatPcafrequencies, frequenciesI);
+			ncomparisons = ncomparisons + absdifference.length; 
 			System.out.println("\tDISCREPANCY "+Arrays.toString(absdifference));
 			HRS_VECTOR[i] = Operations.sumVector(absdifference);
 			System.out.println("\tSUMMED DISCREPANCY "+HRS_VECTOR[i]);
@@ -96,8 +113,11 @@ public class HabitatRepresentativenessScore {
 		
 		System.out.println("");
 		//obtain hrsScore by weighted sum of hrs respect to inverse eigenvalues - too variable, substituted with the sum of the scores
-		//HRS= Operations.scalarProduct(HRS_VECTOR, pca.getInverseNormalizedEigenvalues());
-		HRS = Operations.sumVector(HRS_VECTOR);
+		HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
+		//alternative HRSs
+			//HRS= Operations.scalarProduct(HRS_VECTOR, pca.getInverseNormalizedEigenvalues());
+			//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)HRS_VECTOR.length);
+		
 		
 		System.out.println("TOTAL HRS SCORE: "+HRS);
 		
@@ -112,14 +132,19 @@ public class HabitatRepresentativenessScore {
 			frequencyDistrib = new ArrayList<double[]>();
 			intervals = new ArrayList<double[]>();
 			double[][] pcaColumns = Operations.traspose(pcaComponents);
+			goodfit = true;
 			for (int i = 0; i < sizeDistrib; i++) {
 				double[] pcaPoints = pcaColumns[i];
-				double[] interval = Operations.uniformDivide(Operations.getMax(pcaPoints), Operations.getMin(pcaPoints), pcaPoints);
+				double[] interval = Operations.uniformDivide(Operations.getMax(pcaPoints), Operations.getMin(pcaPoints), pcaPoints,maxNofBins);
+				if (interval.length==maxNofBins) {
+					goodfit = false;
+				}
 				double[] frequencies = Operations.calcFrequencies(interval, pcaPoints);
 				frequencies = Operations.normalizeFrequencies(frequencies, pcaPoints.length);
 				intervals.add(interval);
 				frequencyDistrib.add(frequencies);
 			}
+			
 		}
 	}
 }

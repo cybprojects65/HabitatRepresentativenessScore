@@ -9,9 +9,12 @@ import com.rapidminer.tools.OperatorService;
 
 public class PrincipalComponentAnalysis {
 
-	
+	static boolean RapidMinerInitialised = false; 
 	public PrincipalComponentAnalysis(){
-		new RapidMinerConfiguration().initRapidMiner();
+		if (!RapidMinerInitialised) {
+			new RapidMinerConfiguration().initRapidMiner();
+			RapidMinerInitialised = true;
+		}
 	}
 	
 	
