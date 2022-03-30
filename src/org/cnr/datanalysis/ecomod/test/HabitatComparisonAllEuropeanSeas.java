@@ -16,11 +16,11 @@ public class HabitatComparisonAllEuropeanSeas {
 		//NOTE: the ASC files should be aligned
 		String habitats[] = { "Adriatic_Sea", "Aegean_Sea", "Baltic_Sea", "Bay_of_Biscay", "Black_Sea", "Levantine_Sea",
 				"North_Sea", "Western_Mediterranean_Sea" };
-		int year = 2018;
-		int bins = 200;
+		int year = 2017;
+		int bins = 250;
 		
 		boolean doPermutations = false;
-		boolean doStandardize = false;
+		boolean doStandardize = true;
 		
 		String nonNullexceptions[] = { "Sea_Ice_Concentration" };
 		double HRSMatrix[][] = new double[habitats.length][habitats.length];

@@ -117,7 +117,9 @@ public class HabitatRepresentativenessScore {
 		
 		System.out.println("");
 		//obtain hrsScore by weighted sum of hrs respect to inverse eigenvalues - too variable, substituted with the sum of the scores
-		HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
+		//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
+		HRS = HRS_VECTOR.length-Operations.sumVector(HRS_VECTOR);
+		
 		//alternative HRSs
 			//HRS= Operations.scalarProduct(HRS_VECTOR, pca.getInverseNormalizedEigenvalues());
 			//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)HRS_VECTOR.length);
