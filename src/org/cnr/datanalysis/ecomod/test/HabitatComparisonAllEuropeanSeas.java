@@ -16,11 +16,11 @@ public class HabitatComparisonAllEuropeanSeas {
 		//NOTE: the ASC files should be aligned
 		String habitats[] = { "Adriatic_Sea", "Aegean_Sea", "Baltic_Sea", "Bay_of_Biscay", "Black_Sea", "Levantine_Sea",
 				"North_Sea", "Western_Mediterranean_Sea" };
-		int year = 2020;
+		int year = 2018;
 		int bins = 200;
 		
 		boolean doPermutations = false;
-		boolean doStandardize = true;
+		boolean doStandardize = false;
 		
 		String nonNullexceptions[] = { "Sea_Ice_Concentration" };
 		double HRSMatrix[][] = new double[habitats.length][habitats.length];
@@ -108,7 +108,7 @@ public class HabitatComparisonAllEuropeanSeas {
 			}
 		}
 		
-		String outFile = basePath+"\\"+"HRSComparisonMatrix"+"_Perm_"+doPermutations+"_Standardized_"+doStandardize+".csv";
+		String outFile = basePath+"\\"+"HRSComparisonMatrix_y"+year+"_Perm_"+doPermutations+"_Standardized_"+doStandardize+".csv";
 		File outFileF = new File(outFile);
 		FileWriter fw = new FileWriter(outFileF);
 		fw.write(sb.toString());

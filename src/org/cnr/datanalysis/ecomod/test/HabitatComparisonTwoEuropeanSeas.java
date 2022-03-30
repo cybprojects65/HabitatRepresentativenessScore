@@ -16,8 +16,8 @@ public class HabitatComparisonTwoEuropeanSeas {
 
 		String basePath = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS input data";
 		//NOTE: the ASC files should be aligned
-		String habitats[] = { "Aegean_Sea", "Bay_of_Biscay"};
-		int year = 2020;
+		String habitats[] = { "Adriatic_Sea","Aegean_Sea"};
+		int year = 2018;
 		int bins = 200;
 		
 		boolean doPermutations = false;
@@ -31,14 +31,14 @@ public class HabitatComparisonTwoEuropeanSeas {
 			String habitat1Path = basePath + "\\" + habitat1 + "\\" + year;
 			int hj = 0;
 			for (String habitat2 : habitats) {
-				/*
+				
 				if (habitat1.equals(habitat2)) {
 					HRSMatrix[hi][hj] = 1;
 					hrsvectors.add(new double[0]);
 					hj++;
 					continue;
 				}
-				*/
+				
 				String habitat2Path = basePath + "\\" + habitat2 + "\\" + year;
 
 				File habitat1f = new File(habitat1Path);
