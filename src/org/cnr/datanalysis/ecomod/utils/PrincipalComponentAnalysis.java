@@ -81,26 +81,26 @@ public class PrincipalComponentAnalysis {
 		return values;
 	}
 	
-	public double[][] getComponentsMatrix(double[][] vectors) throws Exception{
+	public double[][] getProjectionsMatrix(double[][] vectors) throws Exception{
 		
 		int nsamples=vectors.length;
-		double[][] components = new double[nsamples][];
+		double[][] projected = new double[nsamples][];
 		
 		for (int i=0;i<nsamples;i++){
-			components[i] = getComponents(vectors[i]);
+			projected[i] = getProjection(vectors[i]);
 		}
 		
-		return components;
+		return projected;
 	}
 
 	
-	public double[] getComponents(double[] vector) throws Exception{
+	public double[] getProjection(double[] vector) throws Exception{
 		
-		double [] components = new double[numberOfComponents];
+		double [] projected = new double[numberOfComponents];
 		for (int i=0;i<numberOfComponents;i++){
-			components[i] = Operations.scalarProduct(vector, getEigenvector(i));
+			projected[i] = Operations.scalarProduct(vector, getEigenvector(i));
 		}
-		return components;
+		return projected;
 	}
 	
 	protected double[][] getPCA(double[][] sampleVectors) throws Exception{
@@ -117,7 +117,8 @@ public class PrincipalComponentAnalysis {
 		
 		PCA pca = (PCA) OperatorService.createOperator("PCA");
 		pca.setParameter("variance_threshold", "0.95");
-		pca.setParameter("dimensionality_reduction", "keep variance");
+		//pca.setParameter("dimensionality_reduction", "keep variance");
+		pca.setParameter("dimensionality_reduction", "none");
 		pca.setParameter("number_of_components", "-1");
 		
 		ExampleSet set = Transformations.matrix2ExampleSet(sampleVectors);

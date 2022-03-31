@@ -76,7 +76,7 @@ public class HabitatRepresentativenessScore {
 		pca = new PrincipalComponentAnalysis();
 		pca.calcPCA(rightAreaPoints);
 		// get the pca components for all the vector
-		pcaComponents = pca.getComponentsMatrix(rightAreaPoints);
+		pcaComponents = pca.getProjectionsMatrix(rightAreaPoints);
 		
 		
 		System.out.println("EXTRACTED "+pcaComponents[0].length+" COMPONENTS");
@@ -88,7 +88,7 @@ public class HabitatRepresentativenessScore {
 		double[][] leftAreaPoints = operations.standardize(firstHabitat);
 		System.out.println("PROJECTING INPUT HABITAT INTO THE PCA SPACE");
 		//project
-		double[][] leftAreaComponents = pca.getComponentsMatrix(leftAreaPoints);
+		double[][] leftAreaComponents = pca.getProjectionsMatrix(leftAreaPoints);
 		
 		//calculate frequencies distributions for each component, respect to previous intervals
 		int components = leftAreaComponents[0].length;

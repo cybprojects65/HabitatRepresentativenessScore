@@ -109,71 +109,21 @@ public class PCAInspector {
 		return outputMatrix;
 	}
 	
-	public static void main(String[] args) throws Exception{
-		String basepath = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS input data\\Adriatic_Sea\\2020\\";
-		
-		//take two features
-		
-		File [] featureFiles = {
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-surface_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Sea-surface_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Sea-bottom_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Net_Primary_Production_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Sea_Ice_Concentration_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-/*
-		File [] featureFiles = {
-				new File(basepath+"Sea-bottom_dissolved_oxygen_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Sea-surface_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		/*
-		File [] featureFiles = {
-				new File(basepath+"Sea-surface_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc"),
-				new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc")
-		};
-		*/
-		
-		PCAInspector inspector = new PCAInspector();
+	
+	double sigma1;
+	double sigma2;
+	double MSE1;
+	double MSE2;
+	double percweight1;
+	double percweight2;
+	double weight1;
+	double weight2;
+	
+	public void PCACompare (File [] featureFiles) throws Exception{
 		
 		String nonNullexceptions[] = { "Sea_Ice_Concentration" };
 		//one feature array for each row
-		double [][] featureMatrix = inspector.extractAlignFeatures(featureFiles, nonNullexceptions);
+		double [][] featureMatrix = extractAlignFeatures(featureFiles, nonNullexceptions);
 		
 		//run PCA
 		Operations operations = new Operations();
@@ -185,9 +135,8 @@ public class PCAInspector {
 		PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis();
 		pca.calcPCA(stdmatrix);
 		// get the pca components for all the vector
-		double [][] featuresProjected = pca.getComponentsMatrix(stdmatrix);
+		double [][] featuresProjected = pca.getProjectionsMatrix(stdmatrix);
 				
-		
 		//estimate the load from first eigen
 		
 		double e0 [] = pca.getEigenvector(0);
@@ -212,15 +161,15 @@ public class PCAInspector {
 		System.out.println(Arrays.toString(load0));
 		System.out.println(Arrays.toString(load1));
 		
-		double weight1 = (load0[0]+load1[0])/2;
-		double weight2 = (load0[1]+load1[1])/2;
+		 weight1 = (load0[0]+load1[0])/2;
+		 weight2 = (load0[1]+load1[1])/2;
 		double totalweight = Math.abs(weight1)+Math.abs(weight2);
-		double percweight1 = weight1*100d/totalweight;
-		double percweight2 = weight2*100d/totalweight;
+		 percweight1 = weight1*100d/totalweight;
+		 percweight2 = weight2*100d/totalweight;
 		
 		System.out.println("PCA loadings");
-		System.out.println("w1: "+Operations.roundDecimal(weight1,2) + " ("+Operations.roundDecimal(percweight1,2)+"%)"+" - "+inspector.featureNames.get(0)[0]);
-		System.out.println("w2: "+Operations.roundDecimal(weight2,2) + " ("+Operations.roundDecimal(percweight2,2)+"%)"+" - "+inspector.featureNames.get(0)[1]);
+		System.out.println("w1: "+Operations.roundDecimal(weight1,2) + " ("+Operations.roundDecimal(percweight1,2)+"%)"+" - "+featureNames.get(0)[0]);
+		System.out.println("w2: "+Operations.roundDecimal(weight2,2) + " ("+Operations.roundDecimal(percweight2,2)+"%)"+" - "+featureNames.get(0)[1]);
 
 		//cut off one eigenvalue
 		double [][] featuresProjectedReduced = new double[featuresProjected.length][1];
@@ -258,11 +207,79 @@ public class PCAInspector {
 			diffs2 [i] = (featureMatrix[i][1] - centroidReprojected[1])*(featureMatrix[i][1] - centroidReprojected[1]);
 		}
 		
-		double MSE1 = Operations.mean(diffs1)/(double)featureMatrix.length;
-		double MSE2 = Operations.mean(diffs2)/(double)featureMatrix.length;
-		System.out.println("MSE1: "+Operations.roundDecimal(MSE1, 2)+" - "+inspector.featureNames.get(0)[0]);		
-		System.out.println("MSE2: "+Operations.roundDecimal(MSE2, 2)+" - "+inspector.featureNames.get(0)[1]);
+		MSE1 = Operations.mean(diffs1)/(double)featureMatrix.length;
+		MSE2 = Operations.mean(diffs2)/(double)featureMatrix.length;
+		System.out.println("MSE1: "+Operations.roundDecimal(MSE1, 2)+" - "+featureNames.get(0)[0]);		
+		System.out.println("MSE2: "+Operations.roundDecimal(MSE2, 2)+" - "+featureNames.get(0)[1]);
 		
+		double f1 [] = new double [featureMatrix.length];
+		double f2 [] = new double [featureMatrix.length];
+		
+		for (int i=0;i<featureMatrix.length;i++) {
+			f1 [i] = featureMatrix[i][0];
+			f2 [i] = featureMatrix[i][1];
+		}
+		
+		 sigma1 = Operations.variance(f1);
+		 sigma2 = Operations.variance(f2);
+		
+		//this check demonstrates that an important aspect is also the interdependency between the variables - covariance
+		System.out.println("Sigma1: "+Operations.roundDecimal(sigma1, 2)+" - "+featureNames.get(0)[0]);		
+		System.out.println("Sigma2: "+Operations.roundDecimal(sigma2, 2)+" - "+featureNames.get(0)[1]);
+
+		
+	}
+	public static void main(String[] args) throws Exception{
+		String basepath = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS input data\\Adriatic_Sea\\2020\\";
+		int casef = 9;
+		File [] featureFiles = new File[2];
+		//take two features
+		if (casef ==1) {
+			featureFiles[0] = new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = new File(basepath+"Sea-surface_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		
+		}
+		if (casef ==2) {
+			featureFiles[1] = new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[0] = new File(basepath+"Sea-surface_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+		if (casef ==3) {
+			
+			featureFiles[0] = 	new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+
+		if (casef == 4) {
+			featureFiles[0] = 	new File(basepath+"Net_Primary_Production_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = 	new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+		if (casef == 5) {
+			featureFiles[0] = 	new File(basepath+"Sea_Ice_Concentration_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = 	new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+
+		if (casef == 6) {
+			featureFiles[0] = 	new File(basepath+"Sea-bottom_dissolved_oxygen_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = 	new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+		
+		if (casef == 7) {
+			featureFiles[0] = 	new File(basepath+"Sea-surface_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = 	new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+		
+		if (casef == 8) {
+			featureFiles[0] = 	new File(basepath+"Sea-bottom_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = 	new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+		
+		if (casef == 9) {
+			featureFiles[0] = 	new File(basepath+"Sea-bottom_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[1] = 	new File(basepath+"Net_Primary_Production_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+		}
+		
+		PCAInspector inspector = new PCAInspector();
+		inspector.PCACompare(featureFiles);
 	}	
 	
 }
