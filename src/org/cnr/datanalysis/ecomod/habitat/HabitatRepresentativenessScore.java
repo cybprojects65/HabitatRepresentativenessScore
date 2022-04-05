@@ -13,6 +13,7 @@ public class HabitatRepresentativenessScore {
 
 	public double[] HRS_VECTOR = null;
 	public double HRS = 0d;
+	public double HRS_PURE = 0d;
 	public int maxNofBins = 100;
 	public double[][] pcaComponents;
 	public PrincipalComponentAnalysis pca;
@@ -119,6 +120,7 @@ public class HabitatRepresentativenessScore {
 		//obtain hrsScore by weighted sum of hrs respect to inverse eigenvalues - too variable, substituted with the sum of the scores
 		//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
 		HRS = HRS_VECTOR.length-Operations.sumVector(HRS_VECTOR);
+		HRS_PURE = Operations.sumVector(HRS_VECTOR);
 		
 		//alternative HRSs
 			//HRS= Operations.scalarProduct(HRS_VECTOR, pca.getInverseNormalizedEigenvalues());
@@ -126,6 +128,7 @@ public class HabitatRepresentativenessScore {
 		
 		
 		System.out.println("TOTAL HRS SCORE: "+HRS);
+		System.out.println("TOTAL HRS PURE SCORE DIFFERENCE: "+HRS_PURE);
 		
 	}
 	
