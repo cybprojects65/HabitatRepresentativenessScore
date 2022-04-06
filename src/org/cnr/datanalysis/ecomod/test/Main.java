@@ -15,6 +15,8 @@ public static void main(String[] args) throws Exception{
 		File t2 = new File("sampletable2.csv");
 		int numberOfBins = 10;
 		
+		System.out.println("Running HRS");
+		
 		if (args!=null && args.length>1) {
 			
 			t1 = new File(args[0]);
