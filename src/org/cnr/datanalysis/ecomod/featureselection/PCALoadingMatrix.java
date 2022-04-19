@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import org.cnr.datanalysis.ecomod.test.HabitatComparisonAllEuropeanSeas;
 import org.cnr.datanalysis.ecomod.utils.Operations;
 
-public class PCALoadingMatrix extends PCAInspector{
+public class PCALoadingMatrix extends PCAInspector2Variables{
 
 	
 	public static void main(String[] args) throws Exception{
@@ -51,7 +51,7 @@ public class PCALoadingMatrix extends PCAInspector{
 						new File(basepath+featureList[i]),
 						new File(basepath+featureList[j]),
 				};
-				PCAInspector inspector = new PCAInspector();
+				PCAInspector2Variables inspector = new PCAInspector2Variables();
 				inspector.PCACompare(featureFiles);
 				int bon = 0;
 				if (Operations.roundDecimal(inspector.weight1,2)>Operations.roundDecimal(inspector.weight2,2))

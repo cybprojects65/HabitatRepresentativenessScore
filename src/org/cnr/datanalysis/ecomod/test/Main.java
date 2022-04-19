@@ -35,12 +35,14 @@ public static void main(String[] args) throws Exception{
 		System.out.println("Habitat vector score: "+Arrays.toString(hrs.HRS_VECTOR));
 		System.out.println("HRS NFEAT-SUM (HRSVEC): "+hrs.HRS);
 		System.out.println("HRS: "+hrs.HRS_PURE);
+		System.out.println("HRS SIMILARITY PERCENTAGE (HRS_PERC): "+hrs.HRS_PERC);
 		
 		File output = new File("hrs_summary.txt");
 		FileWriter fw = new FileWriter(output);
 		fw.write("HRS_VECTOR="+Arrays.toString(hrs.HRS_VECTOR)+"\n");
 		fw.write("HRS="+hrs.HRS_PURE+"\n");
 		fw.write("HRS_NFEATURES_MINUS_HRS="+hrs.HRS+"\n");
+		fw.write("HRS_SIMILARITY_PERC="+hrs.HRS_PERC+"%\n");
 		
 		fw.close();
 		
