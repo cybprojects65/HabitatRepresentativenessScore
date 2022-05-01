@@ -122,6 +122,9 @@ public class PCAInspectorMultiVariate {
 	double percweight2;
 	double weight1;
 	double weight2;
+	public List<Integer> valuableFeatures = new ArrayList<>();
+	public List<Double> valuablePercentages = new ArrayList<>();
+	public List<String> valuableNames = new ArrayList<>();
 	
 	//feature matrix->matrix with one feature for each column
 	public void PCACompare (double [][] featureMatrix, double cumulativePercentContributionEigenvalueThreshold, double individualPercentContributionVariableThreshold) throws Exception{
@@ -189,10 +192,6 @@ public class PCAInspectorMultiVariate {
 		}
 		
 		System.out.println("Keeping features with contribution over "+individualPercentContributionVariableThreshold);
-		List<Integer> valuableFeatures = new ArrayList<>();
-		List<Double> valuablePercentages = new ArrayList<>();
-		List<String> valuableNames = new ArrayList<>();
-		
 				
 		for (int i=0;i<weights.length;i++) {
 			if (weights[i]>0) {
@@ -225,8 +224,20 @@ public class PCAInspectorMultiVariate {
 	
 	public static void main(String[] args) throws Exception{
 		String nonNullexceptions[] = { "Sea_Ice_Concentration" };
+		String year = "2017";
+		//String area = "Adriatic_Sea";
+		//String area = "Aegean_Sea";
+		//String area = "Baltic_Sea"; //90%
+		//String area = "Bay_of_Biscay";
+		//String area = "Black_Sea";
+		//String area = "Levantine_Sea";
+		//String area = "North_Sea";
+		String area = "Western_Mediterranean_Sea";
+		double cumulativePercentContributionEigenvalueThreshold = 95;
+		double individualPercentContributionVariableThreshold = 1;
 		
-		String basepath = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS\\Adriatic_Sea\\2020\\";
+		//String basepath = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS\\Adriatic_Sea\\"+year+"\\";
+		String basepath = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS\\"+area+"\\"+year+"\\";
 		int casef = 10;
 		File [] featureFiles = new File[2]; 
 		//take two features
@@ -275,13 +286,13 @@ public class PCAInspectorMultiVariate {
 		}
 		if (casef == 10) {
 			featureFiles = new File[7];
-			featureFiles[0] = new File(basepath+"Sea-bottom_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
-			featureFiles[1] = new File(basepath+"Sea-surface_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
-			featureFiles[2] = 	new File(basepath+"Net_Primary_Production_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
-			featureFiles[3] = 	new File(basepath+"Sea_Ice_Concentration_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
-			featureFiles[4] = 	new File(basepath+"Sea-bottom_dissolved_oxygen_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
-			featureFiles[5] = 	new File(basepath+"Sea-surface_salinity_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
-			featureFiles[6] = 	new File(basepath+"Sea-bottom_temperature_res_01_annual_years_2020_Clim_scen_today_regional_Adriatic_Sea.asc");
+			featureFiles[0] = new File(basepath+"Sea-bottom_salinity_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
+			featureFiles[1] = new File(basepath+"Sea-surface_temperature_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
+			featureFiles[2] = 	new File(basepath+"Net_Primary_Production_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
+			featureFiles[3] = 	new File(basepath+"Sea_Ice_Concentration_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
+			featureFiles[4] = 	new File(basepath+"Sea-bottom_dissolved_oxygen_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
+			featureFiles[5] = 	new File(basepath+"Sea-surface_salinity_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
+			featureFiles[6] = 	new File(basepath+"Sea-bottom_temperature_res_01_annual_years_"+year+"_Clim_scen_today_regional_"+area+".asc");
 		}
 		
 		//TODO: fix values to the same spatial grid
@@ -289,7 +300,19 @@ public class PCAInspectorMultiVariate {
 		//analyse the variability per year
 		PCAInspectorMultiVariate inspector = new PCAInspectorMultiVariate();
 		double [][] featureMatrix = inspector.extractAlignFeatures(featureFiles, nonNullexceptions);
-		inspector.PCACompare(featureMatrix,95,1);
+		inspector.PCACompare(featureMatrix,cumulativePercentContributionEigenvalueThreshold,individualPercentContributionVariableThreshold);
+		
+		int counter = 0;
+		
+		for (String variable:inspector.valuableNames) {
+			
+			String v = variable.substring(0,variable.indexOf("_res"));
+			v = v.replace("_", " ");
+			double val = inspector.valuablePercentages.get(counter);
+			
+			System.out.println(v+" ("+Operations.roundDecimal(val, 1)+"%)");
+			counter++;
+		}
 	}	
 	
 }
