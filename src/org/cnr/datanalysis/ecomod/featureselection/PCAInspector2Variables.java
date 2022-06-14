@@ -9,8 +9,8 @@ import java.util.List;
 import org.cnr.datanalysis.ecomod.utils.Operations;
 import org.cnr.datanalysis.ecomod.utils.PrincipalComponentAnalysis;
 
-import it.cnr.raster.asc.AscRaster;
-import it.cnr.raster.asc.AscRasterReader;
+import it.cnr.raster.asc.filemanagement.AscRaster;
+import it.cnr.raster.asc.filemanagement.AscRasterReader;
 
 public class PCAInspector2Variables {
 
