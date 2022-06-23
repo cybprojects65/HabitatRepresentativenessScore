@@ -1,5 +1,7 @@
 package org.cnr.datanalysis.ecomod.utils;
 
+import java.io.Serializable;
+
 import com.rapidminer.example.ExampleSet;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.IOObject;
@@ -7,7 +9,7 @@ import com.rapidminer.operator.features.transformation.PCA;
 import com.rapidminer.operator.features.transformation.PCAModel;
 import com.rapidminer.tools.OperatorService;
 
-public class PrincipalComponentAnalysis {
+public class PrincipalComponentAnalysis implements Serializable{
 
 	static boolean RapidMinerInitialised = false; 
 	public PrincipalComponentAnalysis(){
@@ -116,7 +118,7 @@ public class PrincipalComponentAnalysis {
 		System.out.println("STARTING PCA COMPUTATION");
 		
 		PCA pca = (PCA) OperatorService.createOperator("PCA");
-		pca.setParameter("variance_threshold", "0.95");
+		pca.setParameter("variance_threshold", "0.95");//unused if dimensionality reduction is none
 		//pca.setParameter("dimensionality_reduction", "keep variance");
 		pca.setParameter("dimensionality_reduction", "none");
 		pca.setParameter("number_of_components", "-1");
@@ -131,5 +133,43 @@ public class PrincipalComponentAnalysis {
 		System.out.println("MODEL APPLIED");
 	}
 	
+	public void calcPCA(double [][] sampleVectors, double varianceThreshold) throws Exception{
+		
+		System.out.println("STARTING PCA COMPUTATION");
+		
+		PCA pca = (PCA) OperatorService.createOperator("PCA");
+		pca.setParameter(PCA.PARAMETER_VARIANCE_THRESHOLD, ""+varianceThreshold);
+		//pca.setParameter(PCA.PARAMETER_REDUCTION_TYPE, ""+PCA.REDUCTION_NONE);
+		pca.setParameter(PCA.PARAMETER_REDUCTION_TYPE, ""+PCA.REDUCTION_VARIANCE);
+		//pca.setParameter("dimensionality_reduction", "keep variance");
+		//pca.setParameter("dimensionality_reduction", "none");
+		pca.setParameter("number_of_components", "-1");
+		
+		ExampleSet set = Transformations.matrix2ExampleSet(sampleVectors);
+		
+		IOContainer innerInput = new IOContainer(set);
+		IOContainer output = pca.apply(innerInput);
+		IOObject[] outputvector = output.getIOObjects();
+		innermodel = (PCAModel) outputvector[1];
+		
+		numberOfComponents = innermodel.getMaximumNumberOfComponents();
+		for(int i =0;i<innermodel.getMaximumNumberOfComponents();i++) {
+			double cvar = innermodel.getCumulativeVariance(i);
+			//System.out.println("C-VARIANCE "+i+": "+cvar);
+			if (cvar>varianceThreshold)
+			{
+				numberOfComponents = i; //stop to the previous component
+				break;
+			}
+			
+		}
+		
+		System.out.println("Selected components "+numberOfComponents);
+		//System.out.println("MAX FEATURES: "+innermodel.getMaximumNumberOfComponents());
+		
+		
+		System.out.println("MODEL APPLIED");
+	}
+
 	
 }

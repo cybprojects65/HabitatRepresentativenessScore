@@ -113,8 +113,8 @@ public class HabitatComparator {
 	
 	public static void main (String args[]) throws Exception{
 		
-		String habitat1Path = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS input data\\Western_Mediterranean_Sea\\2020";
-		String habitat2Path = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS input data\\Levantine_Sea\\2020";
+		String habitat1Path = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS\\Western_Mediterranean_Sea\\2020";
+		String habitat2Path = "C:\\Users\\Utente\\Ricerca\\Experiments\\Q-Quatics Climatic and AquaMaps data\\HRS\\Levantine_Sea\\2020";
 		
 		String nonNullexceptions [] = {"Sea_Ice_Concentration"};
 		
