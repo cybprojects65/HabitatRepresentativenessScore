@@ -33,6 +33,9 @@ public class HabitatComparator {
 		
 		System.out.println("Analysing "+habitat.getAbsolutePath());
 		for (File f:listFilesh1) {
+			if (f.isDirectory())
+				continue;
+			
 			System.out.println("Reading file "+f.getName());
 			
 			fnames[featureCounter] = f.getName();
@@ -84,7 +87,7 @@ public class HabitatComparator {
 			
 			Double [] features = featurearray.get(idx);
 			for (Double f:features) {
-				 if (f == nodata) {
+				 if (Double.isNaN(f) || f == nodata) {
 					featurearray.remove(idx);
 					removedLines++;
 					break;

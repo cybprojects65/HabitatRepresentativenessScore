@@ -11,6 +11,7 @@ import org.cnr.datanalysis.ecomod.utils.PrincipalComponentAnalysis;
 
 public class HabitatRepresentativenessScore {
 
+
 	public double[] HRS_VECTOR = null;
 	public double HRS = 0d;
 	public double HRS_PURE = 0d;
@@ -67,12 +68,21 @@ public class HabitatRepresentativenessScore {
 		
 	}
 	
-	public void calcHRS(double[][] firstHabitat,double[][] secondHabitat) throws Exception{
+	public void calcHRS(double[][] firstHabitat,double[][] secondHabitat) throws Exception {
+		calcHRS(firstHabitat,secondHabitat,true);
+	}
+	
+	//NOTE: standardisation = false should be used only for very small areas to discover micro-variations
+	public void calcHRS(double[][] firstHabitat,double[][] secondHabitat, boolean standardise) throws Exception{
 		
 		Operations operations = new Operations();
 		System.out.println("STANDARDIZING REFERENCE HABITAT");
 		// standardize the matrix
-		double[][] rightAreaPoints = operations.standardize(secondHabitat);
+		double[][] rightAreaPoints = secondHabitat;
+		
+		if (standardise)
+			rightAreaPoints = operations.standardize(secondHabitat);
+			
 		System.out.println("CALCULATING PCA");
 		//calculate PCA
 		pca = new PrincipalComponentAnalysis();
@@ -87,7 +97,13 @@ public class HabitatRepresentativenessScore {
 		calcFrequenciesDistributionsForComponents(pcaComponents);
 		
 		System.out.println("STANDARDIZING INPUT HABITAT");
-		double[][] leftAreaPoints = operations.standardize(firstHabitat);
+		//double[][] leftAreaPoints = operations.standardize(firstHabitat);
+		double[][] leftAreaPoints = firstHabitat;
+		if (standardise) {
+			System.out.println(operations.means);
+			leftAreaPoints = operations.standardize(firstHabitat,operations.means,operations.variances);
+			//leftAreaPoints = operations.standardize(firstHabitat);
+		}
 		System.out.println("PROJECTING INPUT HABITAT INTO THE PCA SPACE");
 		//project
 		double[][] leftAreaComponents = pca.getProjectionsMatrix(leftAreaPoints);
@@ -113,14 +129,14 @@ public class HabitatRepresentativenessScore {
 			double[] absdifference = Operations.vectorialAbsoluteDifference(habitatPcafrequencies, frequenciesI);
 			ncomparisons = ncomparisons + absdifference.length; 
 			System.out.println("\tDISCREPANCY "+Arrays.toString(absdifference));
-			HRS_VECTOR[i] = Operations.sumVector(absdifference);
+			HRS_VECTOR[i] = Operations.sumNormalVector(absdifference,2d);
 			System.out.println("\tSUMMED DISCREPANCY "+HRS_VECTOR[i]);
 		}
 		
 		System.out.println("");
 		//obtain hrsScore by weighted sum of hrs respect to inverse eigenvalues - too variable, substituted with the sum of the scores
 		//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
-		HRS = HRS_VECTOR.length-Operations.sumVector(HRS_VECTOR);
+		HRS = (HRS_VECTOR.length)-Operations.sumVector(HRS_VECTOR);
 		HRS_PERC = Operations.roundDecimal(HRS*100d / (double) HRS_VECTOR.length,2);
 		HRS_PURE = Operations.sumVector(HRS_VECTOR);
 		
@@ -149,6 +165,7 @@ public class HabitatRepresentativenessScore {
 				double[] interval = Operations.uniformDivide(Operations.getMax(pcaPoints), Operations.getMin(pcaPoints), pcaPoints,maxNofBins);
 				if (interval.length==maxNofBins) {
 					goodfit = false;
+					System.out.println("The maximum number of bins is also the optimal - there is margin for improvement");
 				}
 				double[] frequencies = Operations.calcFrequencies(interval, pcaPoints);
 				frequencies = Operations.normalizeFrequencies(frequencies, pcaPoints.length);
