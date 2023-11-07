@@ -31,6 +31,18 @@ public class Operations {
 		return sum;
 	}
 
+	public static double sumNormalVector(double[] a, double norm) {
+
+		double sum = 0;
+
+		for (int i = 0; i < a.length; i++) {
+			sum = sum + (a[i]/norm);
+		}
+
+		
+		return sum;
+	}
+	
 	public static double[] vectorialDifference(double[] a, double[] b) {
 
 		double[] diff = new double[a.length];
@@ -171,6 +183,99 @@ public class Operations {
 		return permMatrix;
 
 	}
+	
+	public static double[] normals(double[][] mat) {
+		int rows = mat.length;
+		int cols = mat[0].length;
+		double matnorm [][] = new double[rows][cols]; 
+		double maxs [] = new double [cols];
+		for (int i = 0;i<maxs.length;i++) {
+			maxs[i] = -Double.MAX_VALUE;
+		}
+		
+		for (int i = 0; i < rows; i++) {
+		
+			for (int j = 0; j < cols; j++) {
+				if (mat[i][j]>maxs[j])
+					maxs[j] = mat[i][j];
+			}
+		}
+		
+		return maxs;
+	}
+	
+	public static double[] normals(double[][] mat1,double[][] mat2) {
+		int rows = mat1.length;
+		int cols = mat1[0].length;
+		
+		double maxs [] = new double [cols];
+		for (int i = 0;i<maxs.length;i++) {
+			maxs[i] = -Double.MAX_VALUE;
+		}
+		
+		for (int i = 0; i < rows; i++) {
+		
+			for (int j = 0; j < cols; j++) {
+				if (mat1[i][j]>maxs[j])
+					maxs[j] = mat1[i][j];
+			}
+		}
+		
+		for (int i = 0; i < rows; i++) {
+			
+			for (int j = 0; j < cols; j++) {
+				if (mat2[i][j]>maxs[j])
+					maxs[j] = mat2[i][j];
+			}
+		}
+		
+		return maxs;
+	}
+	
+	public static double[] variances(double[][] mat1,double[][] mat2) {
+		int rows = mat1.length;
+		int cols = mat1[0].length;
+		
+		double maxs [] = new double [cols];
+		for (int i = 0;i<maxs.length;i++) {
+			maxs[i] = -Double.MAX_VALUE;
+		}
+		
+		for (int i = 0; i < rows; i++) {
+		
+			for (int j = 0; j < cols; j++) {
+				if (mat1[i][j]>maxs[j])
+					maxs[j] = mat1[i][j];
+			}
+		}
+		
+		for (int i = 0; i < rows; i++) {
+			
+			for (int j = 0; j < cols; j++) {
+				if (mat2[i][j]>maxs[j])
+					maxs[j] = mat2[i][j];
+			}
+		}
+		
+		return maxs;
+	}
+	
+	public static double[][] normalizeMatrix(double[][] mat, double [] maxs) {
+		int rows = mat.length;
+		int cols = mat[0].length;
+		double matnorm [][] = new double[rows][cols]; 
+		
+		for (int i = 0; i < rows; i++) {
+			
+			for (int j = 0; j < cols; j++) {
+				matnorm[i][j]=mat[i][j]/maxs [j];
+			}
+			
+		}
+		return matnorm;
+
+	}
+	
 	
 	public static double[][] normalizeMatrix(double[][] mat) {
 		int rows = mat.length;
