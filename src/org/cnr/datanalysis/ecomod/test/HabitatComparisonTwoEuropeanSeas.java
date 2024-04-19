@@ -57,9 +57,9 @@ public class HabitatComparisonTwoEuropeanSeas {
 				hrs.calcHRS(fmatrix1, fmatrix2);
 				String fnames = Arrays.toString(cleanupStrings(ch.featureNames.get(0)));
 				System.out.println("Habitat vector score\n" + fnames + "\n" + Arrays.toString(hrs.HRS_VECTOR));
-				System.out.println("HRS of "+habitat1+" vs "+habitat2 +": "+ hrs.HRS);
+				System.out.println("HRS of "+habitat1+" vs "+habitat2 +": "+ hrs.HRS_NFEAT_SUM);
 				double meanHRS = 0;
-				meanHRS = hrs.HRS;
+				meanHRS = hrs.HRS_NFEAT_SUM;
 				if (!hrs.isGoodfit()) {
 					System.out.println("#########HRS does not distinguish dimensions using "+bins+" bins - Unfair comparison");
 					System.exit(0);
@@ -80,7 +80,7 @@ public class HabitatComparisonTwoEuropeanSeas {
 							double f2[][] = Operations.permuteColumns(fmatrix2, p1, p2);
 							hrs = new HabitatRepresentativenessScore(bins);
 							hrs.calcHRS(f1, f2);
-							meanHRS = meanHRS + hrs.HRS;
+							meanHRS = meanHRS + hrs.HRS_PURE;
 							nComparisons++;
 						}
 

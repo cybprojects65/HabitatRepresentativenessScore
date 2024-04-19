@@ -45,8 +45,8 @@ public class HabitatComparisonMassaciuccoliLake {
 				hrs.calcHRS(fmatrix1, fmatrix2, standardise);
 				String fnames = Arrays.toString(ch.featureNames.get(0));
 				System.out.println("Habitat vector score\n" + fnames + "\n" + Arrays.toString(hrs.HRS_VECTOR));
-				System.out.println("HRS of " + habitat1 + " vs " + habitat2 + ": " + hrs.HRS);
-				System.out.println("HRS NFEAT-SUM (HRSVEC): " + hrs.HRS);
+				System.out.println("HRS of " + habitat1 + " vs " + habitat2 + ": " + hrs.HRS_NFEAT_SUM);
+				System.out.println("HRS NFEAT-SUM (HRSVEC): " + hrs.HRS_NFEAT_SUM);
 				System.out.println("HRS: " + hrs.HRS_PURE);
 				System.out.println("HRS SIMILARITY PERCENTAGE (HRS_PERC): " + hrs.HRS_PERC);
 

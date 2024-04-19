@@ -13,7 +13,7 @@ public class HabitatRepresentativenessScore {
 
 
 	public double[] HRS_VECTOR = null;
-	public double HRS = 0d;
+	public double HRS_NFEAT_SUM = 0d;
 	public double HRS_PURE = 0d;
 	public double HRS_PERC = 0d;
 	public int maxNofBins = 100;
@@ -114,6 +114,7 @@ public class HabitatRepresentativenessScore {
 		System.out.println("EVALUATING HISTOGRAM DISCREPANCIES");
 		//calculate absolute differences and sum -> obtain a hrs for each PCA component = for each feature
 		HRS_VECTOR = new double[components];
+		System.out.println("\tNUMBER OF COMPONENTS TO TEST "+components);
 		double[][] habitatPcaPointsMatrix = Operations.traspose(leftAreaComponents);
 		int ncomparisons = 0;
 		for (int i = 0; i < components; i++) {
@@ -124,8 +125,8 @@ public class HabitatRepresentativenessScore {
 			double[] habitatPcafrequencies = Operations.calcFrequencies(intervalsI , habitatPcaPoints);
 			habitatPcafrequencies = Operations.normalizeFrequencies(habitatPcafrequencies, habitatPcaPoints.length);
 			System.out.println("\tCOMPONENT "+(i+1)+" - INTERVALS "+intervalsI.length);
-			System.out.println("\tHISTO 1 "+Arrays.toString(frequenciesI));
-			System.out.println("\tHISTO 2 "+Arrays.toString(habitatPcafrequencies));
+			System.out.println("\tHISTO TRAIN "+Arrays.toString(frequenciesI));
+			System.out.println("\tHISTO TEST "+Arrays.toString(habitatPcafrequencies));
 			double[] absdifference = Operations.vectorialAbsoluteDifference(habitatPcafrequencies, frequenciesI);
 			ncomparisons = ncomparisons + absdifference.length; 
 			System.out.println("\tDISCREPANCY "+Arrays.toString(absdifference));
@@ -136,17 +137,17 @@ public class HabitatRepresentativenessScore {
 		System.out.println("");
 		//obtain hrsScore by weighted sum of hrs respect to inverse eigenvalues - too variable, substituted with the sum of the scores
 		//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
-		HRS = (HRS_VECTOR.length)-Operations.sumVector(HRS_VECTOR);
-		HRS_PERC = Operations.roundDecimal(HRS*100d / (double) HRS_VECTOR.length,2);
 		HRS_PURE = Operations.sumVector(HRS_VECTOR);
+		HRS_NFEAT_SUM = (double) (HRS_VECTOR.length)-(double) Operations.sumVector(HRS_VECTOR);
+		HRS_PERC = Operations.roundDecimal(HRS_PURE*100d / (double) HRS_VECTOR.length,2);
 		
 		//alternative HRSs
 			//HRS= Operations.scalarProduct(HRS_VECTOR, pca.getInverseNormalizedEigenvalues());
 			//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)HRS_VECTOR.length);
 		
 		
-		System.out.println("TOTAL HRS SCORE: "+HRS);
-		System.out.println("TOTAL HRS PURE SCORE DIFFERENCE: "+HRS_PURE);
+		System.out.println("TOTAL HRS SCORE: "+HRS_PURE);
+		System.out.println("TOTAL HRS PURE SCORE DIFFERENCE: "+HRS_NFEAT_SUM);
 		
 	}
 	

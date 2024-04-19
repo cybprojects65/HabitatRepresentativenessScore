@@ -25,15 +25,15 @@ public static void main(String[] args) throws Exception{
 		}
 		
 		
-		double[][] ref = HabitatRepresentativenessScore.loadFeatures(t1);
-		double[][] input = HabitatRepresentativenessScore.loadFeatures(t2);
+		double[][] ref = HabitatRepresentativenessScore.loadFeatures(t2);
+		double[][] input = HabitatRepresentativenessScore.loadFeatures(t1);
 		HabitatRepresentativenessScore hrs = new HabitatRepresentativenessScore(numberOfBins);
 		
 		//NOTE: the two dataset should be normalized
 		hrs.calcHRS(input, ref);
 		
 		System.out.println("Habitat vector score: "+Arrays.toString(hrs.HRS_VECTOR));
-		System.out.println("HRS NFEAT-SUM (HRSVEC): "+hrs.HRS);
+		System.out.println("HRS NFEAT-SUM (HRSVEC): "+hrs.HRS_NFEAT_SUM);
 		System.out.println("HRS: "+hrs.HRS_PURE);
 		System.out.println("HRS SIMILARITY PERCENTAGE (HRS_PERC): "+hrs.HRS_PERC);
 		
@@ -41,7 +41,7 @@ public static void main(String[] args) throws Exception{
 		FileWriter fw = new FileWriter(output);
 		fw.write("HRS_VECTOR="+Arrays.toString(hrs.HRS_VECTOR)+"\n");
 		fw.write("HRS="+hrs.HRS_PURE+"\n");
-		fw.write("HRS_NFEATURES_MINUS_HRS="+hrs.HRS+"\n");
+		fw.write("HRS_NFEATURES_MINUS_HRS="+hrs.HRS_NFEAT_SUM+"\n");
 		fw.write("HRS_SIMILARITY_PERC="+hrs.HRS_PERC+"%\n");
 		
 		fw.close();

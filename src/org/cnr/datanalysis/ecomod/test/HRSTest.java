@@ -23,7 +23,7 @@ public class HRSTest {
 		hrs.calcHRS(input, ref);
 		
 		System.out.println("Habitat vector score "+Arrays.toString(hrs.HRS_VECTOR));
-		System.out.println("HRS "+hrs.HRS);
+		System.out.println("HRS "+hrs.HRS_PURE);
 	}
 	
 	

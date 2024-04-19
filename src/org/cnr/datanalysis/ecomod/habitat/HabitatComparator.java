@@ -136,7 +136,7 @@ public class HabitatComparator {
 		hrs.calcHRS(fmatrix1, fmatrix2);
 		String fnames = Arrays.toString(ch.featureNames.get(0));
 		System.out.println("Habitat vector score\n"+fnames+"\n"+Arrays.toString(hrs.HRS_VECTOR));
-		System.out.println("HRS "+hrs.HRS);
+		System.out.println("HRS "+hrs.HRS_PURE);
 	}
 	
 	
