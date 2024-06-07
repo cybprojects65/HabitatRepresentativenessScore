@@ -139,7 +139,7 @@ public class HabitatRepresentativenessScore {
 		//HRS = 1-(Operations.sumVector(HRS_VECTOR)/(double)ncomparisons);
 		HRS_PURE = Operations.sumVector(HRS_VECTOR);
 		HRS_NFEAT_SUM = (double) (HRS_VECTOR.length)-(double) Operations.sumVector(HRS_VECTOR);
-		HRS_PERC = Operations.roundDecimal(HRS_PURE*100d / (double) HRS_VECTOR.length,2);
+		HRS_PERC = 100d-Operations.roundDecimal(HRS_PURE*100d / (double) HRS_VECTOR.length,2);
 		
 		//alternative HRSs
 			//HRS= Operations.scalarProduct(HRS_VECTOR, pca.getInverseNormalizedEigenvalues());
